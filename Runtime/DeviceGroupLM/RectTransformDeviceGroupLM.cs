@@ -1,13 +1,15 @@
+using System;
 using UnityEngine;
 
 namespace CastlesTrip.LayoutMorph
 {
-    public class RectTransformDeviceGroupLM
+    [Serializable]
+    public class RectTransformDeviceGroupLM : DeviceGroupLM
     {
-        public RectTransformDeviceGroupLM(RectTransform rt)
+        public RectTransformDeviceGroupLM()
         {
-            _newScale = rt.localScale;
-            _newRotation = rt.localRotation.eulerAngles.z;
+            _newScale = Vector2.one;
+            _newRotation = 0f;
         }
 
         [SerializeField]
@@ -26,10 +28,10 @@ namespace CastlesTrip.LayoutMorph
         private float _newRotation;
         public float NewRotation => _newRotation;
 
-        public void Apply(RectTransform rt, Vector2 basePosition, Vector2 baseSizeDelta)
+        public void Apply(RectTransform rt, RectTransformBaseValuesLM baseValues)
         {
-            rt.anchoredPosition = basePosition + AdditivePosition;
-            rt.sizeDelta = baseSizeDelta + AdditiveSize;
+            rt.anchoredPosition = baseValues.BaseAnchoredPosition + AdditivePosition;
+            rt.sizeDelta = baseValues.BaseSizeDelta + AdditiveSize;
             Vector3 scale = rt.localScale;
             rt.localScale = new Vector3(NewScale.x, NewScale.y, scale.z);
             Vector3 rotation = rt.localRotation.eulerAngles;

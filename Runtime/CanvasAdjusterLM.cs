@@ -48,12 +48,12 @@ namespace CastlesTrip.LayoutMorph
             }
         }
 
-        private bool IsIpad => DeviceType.GetDeviceType() == DeviceType.Device.Ipad;
-        private bool IsIphoneX => DeviceType.GetDeviceType() == DeviceType.Device.IphoneX;
-        private bool IsOther => DeviceType.GetDeviceType() != DeviceType.Device.Ipad &&
-            DeviceType.GetDeviceType() != DeviceType.Device.IphoneX;
+        private bool IsIpad => Device.GetDeviceType() == DeviceType.Ipad;
+        private bool IsIphoneX => Device.GetDeviceType() == DeviceType.IphoneX;
+        private bool IsOther => Device.GetDeviceType() != DeviceType.Ipad &&
+            Device.GetDeviceType() != DeviceType.IphoneX;
 
-        private CanvasType canvasType { get; set; } = CanvasType.None;
+        public CanvasType canvasType { get; private set; } = CanvasType.None;
 
         public Action<CanvasType> OnAspectChange = delegate { };
 

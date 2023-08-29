@@ -3,7 +3,7 @@ using System;
 namespace CastlesTrip.LayoutMorph
 {
     [Serializable]
-    public class DeviceGroupLM
+    public class BaseValuesLM
     {
 
     }
