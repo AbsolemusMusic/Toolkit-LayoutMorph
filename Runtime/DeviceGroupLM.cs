@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeviceGroupLM
+namespace CastlesTrip.LayoutMorph
 {
+    public class DeviceGroupLM
+    {
 
+    }
 }
