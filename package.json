@@ -5,7 +5,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/AbsolemusMusic/Toolkit-LayoutMorph/tree/develop"
+        "url": "git@github.com:AbsolemusMusic/Toolkit-LayoutMorph.git"
     },
     "author": "Castles Trip <castles.trip@gmail.com> (https://github.com/AbsolemusMusic)",
     "keywords": [
