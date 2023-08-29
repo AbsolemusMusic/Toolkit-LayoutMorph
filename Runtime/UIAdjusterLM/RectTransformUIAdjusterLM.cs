@@ -76,7 +76,7 @@ namespace CastlesTrip.LayoutMorph
             if (BaseValuesSet)
                 return;
 
-            var properties = new RectTransformProperties();
+            var properties = new RectTransformPropertiesLM();
             SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.AnchoredPosition).vector2Value = rectTransform.anchoredPosition;
             SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.SizeDelta).vector2Value = rectTransform.sizeDelta;
             SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.Rotation).floatValue = rectTransform.localRotation.eulerAngles.z;
@@ -163,7 +163,7 @@ namespace CastlesTrip.LayoutMorph
             switch (CurrentDeviceType)
             {
                 case DeviceType.Iphone:
-                    var properties = new RectTransformProperties();
+                    var properties = new RectTransformPropertiesLM();
                     SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.AnchoredPosition).vector2Value = rectTransform.anchoredPosition;
                     SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.SizeDelta).vector2Value = rectTransform.sizeDelta;
                     SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.Rotation).floatValue = rectTransform.localRotation.eulerAngles.z;

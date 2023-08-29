@@ -1,6 +1,6 @@
 namespace CastlesTrip.LayoutMorph
 {
-    public class RectTransformProperties
+    public class RectTransformPropertiesLM
     {
         public readonly string Base = "baseValues";
         public readonly string AnchoredPosition = "baseAnchoredPosition";
