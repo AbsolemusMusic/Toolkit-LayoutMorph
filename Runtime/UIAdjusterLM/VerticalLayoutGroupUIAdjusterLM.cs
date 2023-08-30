@@ -1,39 +1,57 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CastlesTrip.LayoutMorph
 {
-    [RequireComponent(typeof(RectTransform))]
-    public class RectTransformUIAdjusterLM : UIAdjusterLM
+    [RequireComponent(typeof(VerticalLayoutGroup))]
+    public class VerticalLayoutGroupUIAdjusterLM : UIAdjusterLM
     {
-        [SerializeField]
-        private RectTransformDeviceGroupLM iPhoneX;
-
-        [SerializeField]
-        private RectTransformDeviceGroupLM iPad;
-
-        [SerializeField]
-        private RectTransformBaseValuesLM baseValues;
-
-        private RectTransformPropertiesChangerLM properties;
-
-
-        private RectTransform _rectTransform;
-        private RectTransform rectTransform
+        private VerticalLayoutGroup _verticalLayoutGroup;
+        private VerticalLayoutGroup verticalLayoutGroup
         {
             get
             {
-                if (!_rectTransform)
-                    _rectTransform = GetComponent<RectTransform>();
-                return _rectTransform;
+                if (!_verticalLayoutGroup)
+                    _verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
+                return _verticalLayoutGroup;
             }
         }
 
-#if UNITY_EDITOR
+        [SerializeField]
+        private VerticalLayoutGroupDeviceGroupLM iPhoneX;
 
-        private Vector2 lastAnchoredPosition, lastSizeDelta;
+        [SerializeField]
+        private VerticalLayoutGroupDeviceGroupLM iPad;
 
-        private Vector3 lastScale;
+        [Space]
+
+        [SerializeField]
+        private RectOffset basePadding = new RectOffset();
+        [SerializeField]
+        private float baseSpacing;
+
+        [Space]
+
+        [SerializeField]
+        private bool baseValuesSet;
+        public override bool BaseValuesSet => baseValuesSet;
+
+        private RectOffset lastPadding = new RectOffset();
+        private float lastSpacing;
+
+        public override bool IsEqualsValues
+        {
+            get
+            {
+                bool isLeft = lastPadding.left == verticalLayoutGroup.padding.left;
+                bool isRight = lastPadding.right == verticalLayoutGroup.padding.right;
+                bool isTop = lastPadding.top == verticalLayoutGroup.padding.top;
+                bool isBottom = lastPadding.bottom == verticalLayoutGroup.padding.bottom;
+                bool isSpacing = lastSpacing == verticalLayoutGroup.spacing;
+                return isLeft && isRight && isTop && isBottom && isSpacing;
+            }
+        }
 
         private SerializedObject serializedObject;
         public override SerializedObject SerializedObject
@@ -46,32 +64,15 @@ namespace CastlesTrip.LayoutMorph
             }
         }
 
-        public override bool IsEqualsValues
-        {
-            get
-            {
-                bool isAnchored = lastAnchoredPosition == rectTransform.anchoredPosition;
-                bool isSizeDelta = lastSizeDelta == rectTransform.sizeDelta;
-                bool isScale = lastScale == rectTransform.localScale;
-                return isAnchored && isSizeDelta && isScale;
-            }
-        }
-
-        [SerializeField]
-        private bool baseValuesSet;
-        public override bool BaseValuesSet => baseValuesSet;
-#endif
-
         public override void OnEnable()
         {
             base.OnEnable();
-            properties = new RectTransformPropertiesChangerLM(SerializedObject);
+
+            // TODO: Create properties
 #if UNITY_EDITOR
 
             SetBaseValue();
 #endif
-
-            SelectAndSet();
         }
 
         public override void SetBaseValue()
@@ -79,9 +80,12 @@ namespace CastlesTrip.LayoutMorph
             if (BaseValuesSet)
                 return;
 
-            properties.SetAnchoredPosition(rectTransform.anchoredPosition)
-                .SetSizeDelta(rectTransform.sizeDelta)
-                .SetRotation(rectTransform.localRotation.eulerAngles);
+            basePadding.left = verticalLayoutGroup.padding.left;
+            basePadding.right = verticalLayoutGroup.padding.right;
+            basePadding.top = verticalLayoutGroup.padding.top;
+            basePadding.bottom = verticalLayoutGroup.padding.bottom;
+            baseSpacing = verticalLayoutGroup.spacing;
+
             base.SetBaseValue();
         }
 
@@ -130,23 +134,24 @@ namespace CastlesTrip.LayoutMorph
 
         public override void SetToIphoneX()
         {
-            iPhoneX.Apply(rectTransform, baseValues);
+            iPhoneX.Apply(verticalLayoutGroup);
             base.SetToIphoneX();
         }
 
         public override void SetToIPad()
         {
-            iPad.Apply(rectTransform, baseValues);
+            iPad.Apply(verticalLayoutGroup);
             base.SetToIPad();
         }
 
         public override void SetToIPhone()
         {
-            rectTransform.anchoredPosition = baseValues.BaseAnchoredPosition;
-            rectTransform.sizeDelta = baseValues.BaseSizeDelta;
-            Vector3 euler = rectTransform.localRotation.eulerAngles;
-            rectTransform.localRotation = Quaternion.Euler(euler.x, euler.y, baseValues.BaseRotation);
-            rectTransform.localScale = Vector3.one;
+            verticalLayoutGroup.padding.left = basePadding.left;
+            verticalLayoutGroup.padding.right = basePadding.right;
+            verticalLayoutGroup.padding.top = basePadding.top;
+            verticalLayoutGroup.padding.bottom = basePadding.bottom;
+
+            verticalLayoutGroup.spacing = baseSpacing;
             base.SetToIPhone();
         }
 
@@ -163,23 +168,20 @@ namespace CastlesTrip.LayoutMorph
 
             switch (CurrentDeviceType)
             {
-                case DeviceType.Iphone:
-                    properties.SetAnchoredPosition(rectTransform.anchoredPosition)
-                        .SetSizeDelta(rectTransform.sizeDelta)
-                        .SetRotation(rectTransform.localRotation.eulerAngles);
-                    SerializedObject.ApplyModifiedProperties();
-                    break;
                 case DeviceType.IphoneX:
                     SetToIphoneX();
                     break;
                 case DeviceType.Ipad:
                     SetToIPad();
                     break;
-
             }
 
-            lastAnchoredPosition = rectTransform.anchoredPosition;
-            lastSizeDelta = rectTransform.sizeDelta;
+            lastPadding.left = verticalLayoutGroup.padding.left;
+            lastPadding.right = verticalLayoutGroup.padding.right;
+            lastPadding.top = verticalLayoutGroup.padding.top;
+            lastPadding.bottom = verticalLayoutGroup.padding.bottom;
+
+            lastSpacing = verticalLayoutGroup.spacing;
         }
 #endif
     }
