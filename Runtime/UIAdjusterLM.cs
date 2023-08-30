@@ -93,7 +93,7 @@ namespace CastlesTrip.LayoutMorph
 
         public virtual void SetBaseValue()
         {
-            var properties = new PropertiesLM();
+            var properties = new PropertiesChangerLM();
             SerializedObject.FindProperty(properties.ValueSet).boolValue = true;
             SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }

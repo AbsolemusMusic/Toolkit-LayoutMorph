@@ -1,6 +1,6 @@
 namespace CastlesTrip.LayoutMorph
 {
-    public class PropertiesLM
+    public class PropertiesChangerLM
     {
         public readonly string ValueSet = "baseValuesSet";
     }

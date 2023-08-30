@@ -14,6 +14,8 @@ namespace CastlesTrip.LayoutMorph
         [SerializeField]
         private RectTransformBaseValuesLM baseValues;
 
+        private RectTransformPropertiesChangerLM properties;
+
 
         private RectTransform _rectTransform;
         private RectTransform rectTransform
@@ -62,7 +64,7 @@ namespace CastlesTrip.LayoutMorph
         public override void OnEnable()
         {
             base.OnEnable();
-
+            properties = new RectTransformPropertiesChangerLM(SerializedObject);
 #if UNITY_EDITOR
 
             SetBaseValue();
@@ -76,10 +78,9 @@ namespace CastlesTrip.LayoutMorph
             if (BaseValuesSet)
                 return;
 
-            var properties = new RectTransformPropertiesLM();
-            SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.AnchoredPosition).vector2Value = rectTransform.anchoredPosition;
-            SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.SizeDelta).vector2Value = rectTransform.sizeDelta;
-            SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.Rotation).floatValue = rectTransform.localRotation.eulerAngles.z;
+            properties.SetAnchoredPosition(rectTransform.anchoredPosition)
+                .SetSizeDelta(rectTransform.sizeDelta)
+                .SetRotation(rectTransform.localRotation.eulerAngles);
             base.SetBaseValue();
         }
 
@@ -163,10 +164,9 @@ namespace CastlesTrip.LayoutMorph
             switch (CurrentDeviceType)
             {
                 case DeviceType.Iphone:
-                    var properties = new RectTransformPropertiesLM();
-                    SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.AnchoredPosition).vector2Value = rectTransform.anchoredPosition;
-                    SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.SizeDelta).vector2Value = rectTransform.sizeDelta;
-                    SerializedObject.FindProperty(properties.Base).FindPropertyRelative(properties.Rotation).floatValue = rectTransform.localRotation.eulerAngles.z;
+                    properties.SetAnchoredPosition(rectTransform.anchoredPosition)
+                        .SetSizeDelta(rectTransform.sizeDelta)
+                        .SetRotation(rectTransform.localRotation.eulerAngles);
                     SerializedObject.ApplyModifiedProperties();
                     break;
                 case DeviceType.IphoneX:
